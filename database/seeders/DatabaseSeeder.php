@@ -2,24 +2,32 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\Book;
+use App\Models\Category;
 
 class DatabaseSeeder extends Seeder
 {
-    use WithoutModelEvents;
-
-    /**
-     * Seed the application's database.
-     */
     public function run(): void
     {
-        // User::factory(10)->create();
+        $technology = Category::firstOrCreate(['name' => 'Teknologi']);
+        $accounting = Category::firstOrCreate(['name' => 'Akuntansi']);
+        $management = Category::firstOrCreate(['name' => 'Manajemen']);
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        $rows = [
+            ['Laravel untuk Pemula', 'Andi', $technology->id],
+            ['Belajar Python', 'Budi', $technology->id],
+            ['Pemrograman Web Modern', 'Citra', $technology->id],
+            ['Pengantar Akuntansi', 'Dewi', $accounting->id],
+            ['Akuntansi Biaya', 'Eko', $accounting->id],
+            ['Manajemen Keuangan', 'Fitri', $management->id],
+        ];
+
+        foreach ($rows as [$title, $author, $categoryId]) {
+            Book::firstOrCreate(
+                ['title' => $title],
+                ['author' => $author, 'category_id' => $categoryId]
+            );
+        }
     }
 }
